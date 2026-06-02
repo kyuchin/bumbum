@@ -4,6 +4,7 @@
 #include "ScheduleManager.h"
 #include "TrayManager.h"
 #include "Watchdog.h"
+#include "Updater.h"
 #include "Logger.h"
 #include <commdlg.h>
 #include <shellapi.h>
@@ -30,6 +31,7 @@
 #define ID_SAVE          210
 #define ID_RENAME_IE     211
 #define ID_PROXY_BROWSE  212
+#define ID_UPDATE_TIMER  213
 
 // Yardımcı: Dosya seçme penceresi
 void BrowseFile(wchar_t* buffer, HWND editBox, HWND hwndOwner) {
@@ -255,6 +257,9 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
         // Sistem tepsisi simgesini ekle
         TrayManager::Initialize(hwnd);
 
+        // 6 saatte bir otomatik güncelleme kontrolü (21600000 ms)
+        SetTimer(hwnd, ID_UPDATE_TIMER, 21600000, NULL);
+
         Log(L"Program başlatıldı");
         return 0;
     }
@@ -367,6 +372,9 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                 case ID_TRAY_STOP:
                     SendMessageW(hwnd, WM_COMMAND, ID_STOP, 0);
                     break;
+                case ID_TRAY_UPDATE:
+                    Updater::CheckAndUpdate(hwnd, false);
+                    break;
                 case ID_TRAY_EXIT:
                     DestroyWindow(hwnd);
                     break;
@@ -375,6 +383,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
         }
         case WM_TIMER:
             if (wParam == ID_TIMER && ctx) UpdateStatusLabels(ctx);
+            if (wParam == ID_UPDATE_TIMER) Updater::CheckAndUpdate(hwnd, true);
             break;
         case WM_USER + 1:
             if (ctx) UpdateStatusLabels(ctx);
@@ -393,6 +402,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             break;
         case WM_DESTROY:
             Log(L"Program kapatılıyor");
+            KillTimer(hwnd, ID_UPDATE_TIMER);
             StopWatchdog(hwnd, ctx);
             SaveConfig(ctx->config);
             TrayManager::Cleanup();

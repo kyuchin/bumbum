@@ -35,6 +35,8 @@ void TrayManager::ShowMenu(HWND hwnd) {
     AppendMenuW(hMenu, MF_STRING, ID_TRAY_START, L"Başlat");
     AppendMenuW(hMenu, MF_STRING, ID_TRAY_STOP, L"Durdur");
     AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
+    AppendMenuW(hMenu, MF_STRING, ID_TRAY_UPDATE, L"Güncellemeleri Kontrol Et");
+    AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
     AppendMenuW(hMenu, MF_STRING, ID_TRAY_EXIT, L"Çıkış");
     SetForegroundWindow(hwnd);
     TrackPopupMenu(hMenu, TPM_RIGHTALIGN | TPM_BOTTOMALIGN,

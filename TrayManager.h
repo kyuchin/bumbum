@@ -6,6 +6,7 @@
 #define ID_TRAY_START 302
 #define ID_TRAY_STOP  303
 #define ID_TRAY_EXIT  304
+#define ID_TRAY_UPDATE 305
 
 namespace TrayManager {
     void Initialize(HWND hwnd);
