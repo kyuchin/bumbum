@@ -1,0 +1,12 @@
+# Compiled files
+*.obj
+*.res
+*.exe
+*.7z
+
+# Logs
+telegram_cache.dat
+watchdog_log.txt
+
+# Build output
+/derleme/
