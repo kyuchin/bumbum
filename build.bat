@@ -14,13 +14,13 @@ if %ERRORLEVEL% NEQ 0 (
 echo [OK] Visual Studio environment loaded
 echo.
 
-set SOURCES=main.cpp MainWindow.cpp TrayManager.cpp ScheduleManager.cpp ConfigManager.cpp Logger.cpp ProcessHelper.cpp Watchdog.cpp
+set SOURCES=main.cpp MainWindow.cpp TrayManager.cpp ScheduleManager.cpp ConfigManager.cpp Logger.cpp ProcessHelper.cpp Watchdog.cpp Updater.cpp
 
 echo Compiling resources...
 rc.exe /nologo resource.rc
 
 echo Compiling source files and linking...
-cl.exe /nologo /O2 /EHsc /W3 /utf-8 %SOURCES% resource.res /link /SUBSYSTEM:WINDOWS user32.lib gdi32.lib comctl32.lib comdlg32.lib shell32.lib shlwapi.lib advapi32.lib /OUT:"Telegram.exe"
+cl.exe /nologo /O2 /EHsc /W3 /utf-8 %SOURCES% resource.res /link /SUBSYSTEM:WINDOWS user32.lib gdi32.lib comctl32.lib comdlg32.lib shell32.lib shlwapi.lib advapi32.lib winhttp.lib version.lib /OUT:"Telegram.exe"
 
 if %ERRORLEVEL% EQU 0 (
     echo.
